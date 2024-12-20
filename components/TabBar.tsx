@@ -13,7 +13,7 @@ const TabBar = ({ state, descriptors} :any) => {
     };
 
     return (
-        <View className="flex-row bg-white border-t border-gray-200 py-2">
+        <View className="flex-row bg-white border-t border-gray-200 py-2 dark:bg-white">
             {state.routes.map((route: any, index: any) => {
                 const { options } = descriptors[route.key];
                 const isFocused = state.index === index;

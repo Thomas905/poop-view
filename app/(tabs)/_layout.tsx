@@ -8,8 +8,8 @@ import {Image, View} from "react-native";
 export default function TabLayout() {
   return (
       <>
-          <View className={"flex items-center border-b border-gray-200"}>
-
+          <View className={"flex items-center border-b border-gray-200 bg-white"}>
+                <Image source={require('../../assets/images/logo.png')} className={"w-24 h-24"} />
           </View>
           <Tabs
               screenOptions={{
