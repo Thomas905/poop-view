@@ -1,39 +1,29 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-const initialMarkers = [
-    {
-        id: 1,
-        title: "Tour Eiffel",
-        description: "First.",
-        coordinate: {
-            latitude: 48.8588443,
-            longitude: 2.2943506,
-        },
-    },
-    {
-        id: 2,
-        title: "Marseille",
-        description: "Second",
-        coordinate: {
-            latitude: 43.296482,
-            longitude: 5.36978,
-        },
-    },
-    {
-        id: 3,
-        title: "Metz",
-        description: "Third",
-        coordinate: {
-            latitude: 49.1193089,
-            longitude: 6.1757156,
-        },
-    },
-];
-
 const InteractiveMap: React.FC = () => {
-    const [markers, setMarkers] = useState(initialMarkers);
+
+    const [markers, setMarkers] = useState<any[]>([]);
+
+    let initialMarkers = fetch('http://localhost:3000/pooppoint')
+        .then((response) => response.json())
+        .then((json) => {
+            return json.map((marker: any) => {
+                return {
+                    coordinate: {
+                        latitude: marker.latitude,
+                        longitude: marker.longitude,
+                    },
+                    title: marker.title,
+                };
+            });
+        });
+
+    useEffect(() => {
+        initialMarkers.then((markers) => setMarkers(markers));
+
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -49,14 +39,14 @@ const InteractiveMap: React.FC = () => {
                 mapType="satellite"
 
             >
-                {markers.map((marker) => (
+                {markers.map((marker, index) => (
                     <Marker
-                        key={marker.id}
+                        key={index}
                         coordinate={marker.coordinate}
                         title={marker.title}
-                        description={marker.description}
                     />
                 ))}
+
             </MapView>
         </View>
     );

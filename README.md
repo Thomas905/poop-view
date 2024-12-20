@@ -1,4 +1,5 @@
-# Welcome to your POOP VIEW Application 👋
+# Welcome to your POOP VIEW 👋
+### This is a Proof of Concept (POC) application
 
 ## Author
 - Thomas Clarisse
