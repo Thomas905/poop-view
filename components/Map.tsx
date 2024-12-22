@@ -1,34 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Button from "@/components/Button/Button";
+import {dropThePoop, poopfetchMarkers} from "@/hooks/PoopFunction/PoopFunction";
 
 const InteractiveMap: React.FC = () => {
-
     const [markers, setMarkers] = useState<any[]>([]);
 
-    let initialMarkers = fetch('http://localhost:3000/pooppoint')
-        .then((response) => response.json())
-        .then((json) => {
-            return json.map((marker: any) => {
-                return {
-                    coordinate: {
-                        latitude: marker.latitude,
-                        longitude: marker.longitude,
-                    },
-                    title: marker.title,
-                };
-            });
-        });
-
     useEffect(() => {
-        initialMarkers.then((markers) => setMarkers(markers));
-
+        poopfetchMarkers(setMarkers);
     }, []);
-
-    function onClickOnButton() {
-        console.log('Button clicked');
-    }
 
     return (
         <View style={styles.container}>
@@ -52,7 +33,10 @@ const InteractiveMap: React.FC = () => {
                 ))}
             </MapView>
             <View className="absolute bottom-0 self-center">
-                <Button action={onClickOnButton} />
+                <Button action={async () => {
+                    await dropThePoop();
+                    await poopfetchMarkers(setMarkers);
+                }} />
             </View>
         </View>
     );
