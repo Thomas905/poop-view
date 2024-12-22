@@ -3,6 +3,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const app = express();
 const port = 3000;
+require('dotenv').config();
 
 app.use(cors());
 app.use(express.json());
@@ -14,7 +15,7 @@ const db = mysql.createConnection({
     database: process.env.DATABASE_NAME,
 });
 
-db.connect((err: string) => {
+db.connect((err) => {
     if (err) {
         console.error('Erreur de connexion MySQL:', err);
     } else {
@@ -22,8 +23,8 @@ db.connect((err: string) => {
     }
 });
 
-app.get('/pooppoint', (req: Request, res: any) => {
-    db.query('SELECT * FROM pooppoint', (err: string, results: string) => {
+app.get('/pooppoint', (req, res) => {
+    db.query('SELECT * FROM pooppoint', (err, result) => {
         if (err) {
             res.status(500).send('Erreur dans la requête MySQL');
         } else {
