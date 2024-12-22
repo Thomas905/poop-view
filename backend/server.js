@@ -28,8 +28,8 @@ app.get('/pooppoint', (req, res) => {
         if (err) {
             res.status(500).send('Erreur dans la requête MySQL');
         } else {
-            res.json(results);
-        }
+            res.status(200).send(result);
+        };
     });
 });
 
