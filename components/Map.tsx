@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import Button from "@/components/Button/Button";
 
 const InteractiveMap: React.FC = () => {
 
@@ -25,6 +26,10 @@ const InteractiveMap: React.FC = () => {
 
     }, []);
 
+    function onClickOnButton() {
+        console.log('Button clicked');
+    }
+
     return (
         <View style={styles.container}>
             <MapView
@@ -37,7 +42,6 @@ const InteractiveMap: React.FC = () => {
                 }}
                 zoomEnabled={true}
                 mapType="satellite"
-
             >
                 {markers.map((marker, index) => (
                     <Marker
@@ -46,8 +50,10 @@ const InteractiveMap: React.FC = () => {
                         title={marker.title}
                     />
                 ))}
-
             </MapView>
+            <View className="absolute bottom-0 self-center">
+                <Button action={onClickOnButton} />
+            </View>
         </View>
     );
 };
