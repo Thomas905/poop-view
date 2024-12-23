@@ -35,10 +35,10 @@ export async function getPoopPoints() {
     return poopPoints;
 }
 
-export const fetchMarkers = async (setMarkers) => {
+export const fetchMarkers = async (setMarkers:any) => {
     try {
         const poopPoints = await getPoopPoints();
-        const mappedMarkers = poopPoints.map((marker) => ({
+        const mappedMarkers = poopPoints.map((marker: any) => ({
             coordinate: {
                 latitude: marker.latitude,
                 longitude: marker.longitude,
@@ -51,7 +51,7 @@ export const fetchMarkers = async (setMarkers) => {
     }
 };
 
-export const fetchCurrentLocation = async (setCurrentLocation, mapRef) => {
+export const fetchCurrentLocation = async (setCurrentLocation: any, mapRef: any) => {
     try {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
