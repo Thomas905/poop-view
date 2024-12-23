@@ -35,10 +35,10 @@ export async function getPoopPoints() {
     return poopPoints;
 }
 
-export async function poopfetchMarkers (setMarkers: any) {
+export const fetchMarkers = async (setMarkers) => {
     try {
         const poopPoints = await getPoopPoints();
-        const mappedMarkers = poopPoints.map((marker: any) => ({
+        const mappedMarkers = poopPoints.map((marker) => ({
             coordinate: {
                 latitude: marker.latitude,
                 longitude: marker.longitude,
@@ -48,5 +48,31 @@ export async function poopfetchMarkers (setMarkers: any) {
         setMarkers(mappedMarkers);
     } catch (error) {
         console.error('Failed to fetch markers:', error);
+    }
+};
+
+export const fetchCurrentLocation = async (setCurrentLocation, mapRef) => {
+    try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            console.error('Permission to access location was denied');
+            return;
+        }
+
+        const location = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.High,
+        });
+
+        const region = {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+        };
+
+        setCurrentLocation(region);
+        mapRef.current?.animateToRegion(region, 1000);
+    } catch (error) {
+        console.error('Error fetching current location:', error);
     }
 };
