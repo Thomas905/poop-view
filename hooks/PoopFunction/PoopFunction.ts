@@ -12,7 +12,7 @@ export async function dropThePoop() {
         const latitude = location.coords.latitude;
         const longitude = location.coords.longitude;
 
-        await fetch('http://localhost:3000/pooppoint', {
+        await fetch(process.env.EXPO_PUBLIC_API_URL + '/pooppoint', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export async function dropThePoop() {
 }
 
 export async function getPoopPoints() {
-    const response = await fetch('http://localhost:3000/pooppoint');
+    const response = await fetch(process.env.EXPO_PUBLIC_API_URL + '/pooppoint');
     const poopPoints = await response.json();
     return poopPoints;
 }
