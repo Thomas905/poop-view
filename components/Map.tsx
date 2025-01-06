@@ -1,33 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import Button from "@/components/Button/Button";
+import {dropThePoop, fetchCurrentLocation, fetchMarkers} from "@/hooks/PoopFunction/PoopFunction";
 
-const InteractiveMap: React.FC = () => {
-
-    const [markers, setMarkers] = useState<any[]>([]);
-
-    let initialMarkers = fetch('http://localhost:3000/pooppoint')
-        .then((response) => response.json())
-        .then((json) => {
-            return json.map((marker: any) => {
-                return {
-                    coordinate: {
-                        latitude: marker.latitude,
-                        longitude: marker.longitude,
-                    },
-                    title: marker.title,
-                };
-            });
-        });
+const InteractiveMap = () => {
+    const [markers, setMarkers] = useState([]);
+    const [currentLocation, setCurrentLocation] = useState(null);
+    const mapRef = useRef(null);
 
     useEffect(() => {
-        initialMarkers.then((markers) => setMarkers(markers));
-
+        fetchMarkers(setMarkers);
+        fetchCurrentLocation(setCurrentLocation, mapRef);
     }, []);
 
     return (
         <View style={styles.container}>
             <MapView
+                ref={mapRef}
                 style={styles.map}
                 initialRegion={{
                     latitude: 46.603354,
@@ -35,19 +25,27 @@ const InteractiveMap: React.FC = () => {
                     latitudeDelta: 8,
                     longitudeDelta: 8,
                 }}
+                showsUserLocation={true}
                 zoomEnabled={true}
                 mapType="satellite"
-
             >
-                {markers.map((marker, index) => (
+                {markers.map((marker: any, index: any) => (
                     <Marker
                         key={index}
                         coordinate={marker.coordinate}
                         title={marker.title}
                     />
                 ))}
-
             </MapView>
+            <View className="absolute bottom-0 self-center">
+                <Button
+                    action={async () => {
+                        await dropThePoop();
+                        await fetchMarkers(setMarkers);
+                        await fetchCurrentLocation(setCurrentLocation, mapRef);
+                    }}
+                />
+            </View>
         </View>
     );
 };

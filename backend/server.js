@@ -17,21 +17,33 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
     if (err) {
-        console.error('Erreur de connexion MySQL:', err);
+        console.error(err);
     } else {
-        console.log('Connecté à la base de données MySQL');
+        console.log('Connected to database');
     }
 });
 
 app.get('/pooppoint', (req, res) => {
     db.query('SELECT * FROM pooppoint', (err, result) => {
         if (err) {
-            res.status(500).send('Erreur dans la requête MySQL');
+            res.status(500).send(err);
         } else {
             res.status(200).send(result);
         };
     });
 });
+
+app.post('/pooppoint', (req, res) => {
+    const { title, latitude, longitude } = req.body;
+    db.query('INSERT INTO pooppoint (title, latitude, longitude) VALUES (?, ?, ?)', [title, latitude, longitude], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.status(201);
+        };
+    });
+})
 
 app.listen(port, () => {
     console.log(`Serveur backend démarré sur http://localhost:${port}`);
